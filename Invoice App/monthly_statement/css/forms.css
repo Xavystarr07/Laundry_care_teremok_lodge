@@ -1,0 +1,41 @@
+/* ============================================================
+   css/forms.css — Select dropdowns and date inputs
+   Edit input field styles here
+   ============================================================ */
+
+select,
+input[type="date"] {
+    background: white;
+    color: #333;
+    border: 2px solid #2575fc;
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 16px;
+    width: 12%;
+    margin-bottom: 15px;
+    transition: 0.3s ease-in-out;
+}
+
+select:hover,
+input[type="date"]:hover {
+    border-color: #6a11cb;
+    transform: scale(1.01);
+}
+
+/* Fuel levy input inside table */
+input[type="number"]#fuelCost {
+    width: 80%;
+    padding: 5px;
+    text-align: left;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: inherit;
+    font-family: inherit;
+    color: black;
+}
+
+@media (max-width: 768px) {
+    select, input[type="date"] {
+        width: 80%;
+    }
+}

@@ -1,0 +1,154 @@
+@media print {
+
+    /* ── Hide all UI controls ── */
+    button,
+    .print-btn,
+    .back-button,
+    .small-green-btn,
+    .no-print,
+    select,
+    label,
+    form,
+    input[type="date"],
+    input[type="number"],
+    #fuelCostRow,
+    #baseTotalValue,
+    #statementDates,
+    #monthSuggestions {
+        display: none !important;
+    }
+
+    /* ── Page background ── */
+    body {
+        background: linear-gradient(to right, #4b6cb7, #182848) !important;
+        color: white !important;
+        padding: 20px !important;
+        margin: 0 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    /* ── Header layout ── */
+    .header-info {
+        display: flex !important;
+        position: relative !important;
+        padding: 10px 20px !important;
+        color: white !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    .business-info {
+        text-align: center !important;
+        color: white !important;
+    }
+
+    .contact-info {
+        position: absolute !important;
+        top: 0 !important;
+        right: 0 !important;
+        text-align: right !important;
+        color: white !important;
+    }
+
+    .recipient-info {
+        text-align: left !important;
+        color: white !important;
+        margin-top: 10px !important;
+    }
+
+    /* ── Headings ── */
+    h1, h2, h3 {
+        color: white !important;
+        text-shadow: 2px 2px 5px rgba(0,0,0,0.3) !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    .statement-title,
+    .tagline {
+        color: white !important;
+        text-align: center !important;
+    }
+
+    /* ── Date period box ── */
+    .date-period-container {
+        display: block !important;
+        text-align: center !important;
+        color: white !important;
+        font-size: 14px !important;
+        margin: 8px auto !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    /* ── Table ── */
+    #statementTable {
+        width: 90% !important;
+        margin: 10px auto !important;
+        box-shadow: none !important;
+        background: white !important;
+        color: black !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    #statementTable thead {
+        background: linear-gradient(to right, #6a11cb, #2575fc) !important;
+        color: white !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    #statementTable thead th {
+        color: white !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    #statementTable tbody tr:not(.grand-total-row) td {
+        color: black !important;
+        border: 1px solid #ddd !important;
+    }
+
+    #statementTable tbody tr.grand-total-row td {
+        background: linear-gradient(to right, #6a11cb, #2575fc) !important;
+        color: white !important;
+        font-weight: bold !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    /* ── Grand total ── */
+    .grand-total-row,
+    .grand-total-row td {
+        background: linear-gradient(to right, #6a11cb, #2575fc) !important;
+        color: white !important;
+        font-weight: bold !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    /* ── Banking details ── */
+    .banking-title {
+        text-align: center !important;
+        color: black !important;
+        font-weight: bold !important;
+    }
+
+    .banking-detail {
+        text-align: center !important;
+        color: black !important;
+    }
+
+    .statement-dates-print {
+        display: block !important;
+        text-align: center !important;
+        font-size: 16px !important;
+        font-weight: bold !important;
+        color: white !important;
+        margin: 8px auto !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+}

@@ -1,0 +1,113 @@
+/* ============================================================
+   css/combo.css — Add Combo modal (light + dark)
+   ============================================================ */
+#comboModal {
+    display: none; position: fixed; inset: 0; z-index: 9999;
+    overflow-y: auto; padding: 5vh 16px;
+    background: rgba(15,23,42,0.55);
+    backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+    font-family: 'Segoe UI', Arial, sans-serif; text-align: left;
+}
+#comboModal .cm-box {
+    --cm-bg:#ffffff; --cm-text:#1e293b; --cm-muted:#64748b; --cm-line:#e2e8f0;
+    --cm-soft:#f1f5f9; --cm-accent:#4f46e5; --cm-accent-soft:#eef2ff; --cm-on:#ffffff;
+    max-width: 640px; margin: 0 auto;
+    background: var(--cm-bg); color: var(--cm-text);
+    border-radius: 22px; overflow: hidden;
+    box-shadow: 0 30px 80px rgba(15,23,42,0.35);
+    animation: cmPop 0.22s ease;
+}
+body.dark-mode #comboModal .cm-box {
+    --cm-bg:#12142b; --cm-text:#eceefc; --cm-muted:#9a9fc4; --cm-line:#2a2e58;
+    --cm-soft:#1b1e40; --cm-accent:#a78bfa; --cm-accent-soft:rgba(167,139,250,0.14); --cm-on:#0d0b24;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(167,139,250,0.3), 0 0 40px rgba(124,58,237,0.25);
+}
+@keyframes cmPop { from { opacity:0; transform:translateY(14px) scale(0.98); } to { opacity:1; transform:none; } }
+
+/* header */
+#comboModal .cm-head {
+    display: flex; align-items: center; gap: 14px; padding: 22px 26px;
+    background: linear-gradient(120deg, #4338ca, #7c3aed);
+}
+body.dark-mode #comboModal .cm-head {
+    background: linear-gradient(120deg, #1a1245, #2b1a6b);
+    border-bottom: 1px solid rgba(167,139,250,0.35);
+}
+#comboModal .cm-icon {
+    width: 46px; height: 46px; border-radius: 14px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(255,255,255,0.18); color: #fff;
+}
+body.dark-mode #comboModal .cm-icon { color: #67e8f9; box-shadow: 0 0 14px rgba(103,232,249,0.35); }
+#comboModal .cm-head h3 { margin: 0; font-size: 21px; font-weight: 800; color: #fff !important; -webkit-text-fill-color: #fff; }
+#comboModal .cm-head p  { margin: 3px 0 0; font-size: 13.5px; color: rgba(255,255,255,0.8) !important; }
+
+/* tabs */
+#categoryContainer { padding: 18px 26px 8px; }
+#comboModal .cm-tabs { display: flex; flex-wrap: wrap; gap: 8px; padding-bottom: 16px; }
+#comboModal .cm-tab {
+    margin: 0 !important; padding: 9px 18px; border-radius: 999px;
+    border: 1.5px solid var(--cm-line); background: var(--cm-soft); color: var(--cm-muted);
+    font-size: 14px; font-weight: 700; font-family: inherit; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 8px; transition: all 0.15s;
+}
+#comboModal .cm-tab:hover { border-color: var(--cm-accent); color: var(--cm-accent); }
+#comboModal .cm-tab.active { background: var(--cm-accent); border-color: var(--cm-accent); color: var(--cm-on); }
+body.dark-mode #comboModal .cm-tab.active { box-shadow: 0 0 14px rgba(167,139,250,0.5); }
+#comboModal .cm-n {
+    min-width: 20px; height: 20px; padding: 0 6px; border-radius: 10px;
+    background: #16a34a; color: #fff; font-size: 12px; font-weight: 800;
+    display: inline-flex; align-items: center; justify-content: center;
+}
+
+/* option cards */
+#comboModal .cm-card {
+    position: relative; display: flex; align-items: center; gap: 14px;
+    padding: 14px 16px; margin-bottom: 10px;
+    border: 1.5px solid var(--cm-line); border-radius: 14px;
+    background: var(--cm-bg); cursor: pointer;
+    transition: border-color 0.15s, background 0.15s, transform 0.15s, box-shadow 0.15s;
+}
+#comboModal .cm-card:hover { border-color: var(--cm-accent); transform: translateX(3px); }
+#comboModal .cm-card:has(input:checked) { border-color: var(--cm-accent); background: var(--cm-accent-soft); }
+body.dark-mode #comboModal .cm-card:has(input:checked) { box-shadow: 0 0 16px rgba(167,139,250,0.3); }
+#comboModal .cm-card input[type="checkbox"] {
+    position: absolute; opacity: 0; width: 0; height: 0; margin: 0; padding: 0; border: 0;
+}
+#comboModal .cm-check {
+    width: 24px; height: 24px; flex-shrink: 0; border-radius: 8px;
+    border: 2px solid var(--cm-line); background: var(--cm-bg);
+    display: flex; align-items: center; justify-content: center; transition: all 0.15s;
+}
+#comboModal .cm-check::after {
+    content: ''; width: 6px; height: 11px; margin-top: -2px;
+    border: solid var(--cm-on); border-width: 0 3px 3px 0;
+    transform: rotate(45deg) scale(0); transition: transform 0.15s;
+}
+#comboModal .cm-card input:checked + .cm-check { background: var(--cm-accent); border-color: var(--cm-accent); }
+#comboModal .cm-card input:checked + .cm-check::after { transform: rotate(45deg) scale(1); }
+#comboModal .cm-card input:focus-visible + .cm-check { outline: 3px solid var(--cm-accent); outline-offset: 2px; }
+#comboModal .cm-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+#comboModal .cm-name  { font-size: 15px; font-weight: 600; line-height: 1.35; color: var(--cm-text); }
+#comboModal .cm-codes { font-size: 12px; letter-spacing: 0.3px; color: var(--cm-muted); }
+#comboModal .cm-badge {
+    font-family: Consolas, monospace; font-size: 12px; font-weight: 800;
+    padding: 4px 10px; border-radius: 8px;
+    background: var(--cm-accent-soft); color: var(--cm-accent);
+}
+
+/* footer */
+#comboModal .cm-foot {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 16px 26px 22px; margin-top: 6px; border-top: 1px solid var(--cm-line);
+}
+#comboCount { font-size: 14px; font-weight: 700; color: var(--cm-muted); }
+#comboModal .cm-btn {
+    margin: 0 0 0 10px !important; padding: 12px 26px; border: none; border-radius: 12px;
+    font-size: 15px; font-weight: 700; font-family: inherit; cursor: pointer;
+    transition: filter 0.15s, transform 0.15s;
+}
+#comboModal .cm-btn:hover { filter: brightness(1.07); transform: translateY(-1px); }
+#comboModal .cm-cancel  { background: var(--cm-soft); color: var(--cm-text); }
+#comboModal .cm-confirm { background: linear-gradient(135deg, #4f46e5, #7c3aed); color: #fff; box-shadow: 0 6px 18px rgba(79,70,229,0.35); }
+body.dark-mode #comboModal .cm-confirm { background: linear-gradient(135deg, #a78bfa, #22d3ee); color: #0d0b24; box-shadow: 0 0 18px rgba(34,211,238,0.45); }

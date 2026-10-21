@@ -1,0 +1,182 @@
+/* ============================================================
+   css/print.css — Print styles
+   Forces light mode always regardless of OS dark mode setting
+   ============================================================ */
+
+@media print {
+
+    /* ── Nuclear light mode force ── */
+    html {
+        filter: none !important;
+        -webkit-filter: none !important;
+        color-scheme: light !important;
+        background: white !important;
+    }
+
+    body {
+        background: white !important;
+        color: black !important;
+        filter: none !important;
+        -webkit-filter: none !important;
+        color-scheme: light !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    /* Force every single element to light */
+    *,
+    *::before,
+    *::after {
+        color-scheme: light !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+
+    /* ── Hide all UI controls ── */
+    button,
+    .submit-btn,
+    .btn-row,
+    .save-row,
+    #saveInvoiceBtn,
+    .monthly-statements-btn,
+    .search-container,
+    #imagePreviewBar,
+    #removeImageBtn,
+    #robotPopup,
+    .image-preview-anchor,
+    #fieldGuide {
+        display: none !important;
+    }
+
+    /* ── Header ── */
+    .header {
+        background: white !important;
+        color: black !important;
+    }
+
+    .header * {
+        color: black !important;
+        background: transparent !important;
+        -webkit-text-fill-color: black !important;
+    }
+
+    h1, h2, h3, p {
+        color: black !important;
+        background: transparent !important;
+        -webkit-text-fill-color: black !important;
+    }
+
+    /* ── Table ── */
+    table {
+        background: white !important;
+        color: black !important;
+        width: 80% !important;
+        border-collapse: collapse !important;
+    }
+
+    thead, thead tr {
+        background: white !important;
+    }
+
+    th {
+        background-color: #2196F3 !important;
+        color: black !important;
+        -webkit-text-fill-color: black !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    td {
+        color: black !important;
+        background: white !important;
+        -webkit-text-fill-color: black !important;
+        border: 1px solid black !important;
+    }
+
+    tbody tr {
+        background: white !important;
+    }
+
+    tbody tr:hover {
+        background: white !important;
+    }
+
+    /* ── Inputs & Selects ── */
+    input,
+    input[readonly],
+    input:disabled {
+        background: white !important;
+        color: black !important;
+        -webkit-text-fill-color: black !important;
+        opacity: 1 !important;
+        border: 1px solid #ccc !important;
+        -webkit-appearance: none !important;
+    }
+
+    select,
+    select:disabled {
+        background: white !important;
+        color: black !important;
+        -webkit-text-fill-color: black !important;
+        opacity: 1 !important;
+        border: 1px solid #ccc !important;
+        -webkit-appearance: none !important;
+        -moz-appearance: none !important;
+        appearance: none !important;
+        pointer-events: none;
+    }
+
+    /* Hide invoice number spinners */
+    .invoice-input::-webkit-outer-spin-button,
+    .invoice-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .invoice-input[type=number] { -moz-appearance: textfield; }
+
+    /* ── Grand total ── */
+    .grand-total-row {
+        margin: 20px auto 10px;
+        background: transparent !important;
+    }
+
+    .grand-total-row h3 {
+        font-size: 1.3em;
+        text-align: center;
+        color: black !important;
+        -webkit-text-fill-color: black !important;
+        background: transparent !important;
+    }
+
+    /* ── Page 2 image ── */
+    #printPage2 {
+        page-break-before: always;
+        width: 210mm;
+        height: 277mm;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        padding: 10mm;
+        box-sizing: border-box;
+        margin: 0;
+        background: white !important;
+    }
+
+    #printPage2.no-image { display: none !important; }
+
+    #page2ImageContainer {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #page2Image {
+        max-width: 190mm;
+        max-height: 257mm;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+        display: block;
+    }
+}

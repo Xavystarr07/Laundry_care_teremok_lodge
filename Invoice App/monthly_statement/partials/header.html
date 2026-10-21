@@ -1,0 +1,130 @@
+<!-- ============================================================
+     partials/header.html — Business name, address, contact, recipient
+     Edit your contact details and recipient info here ONLY
+     ============================================================ -->
+
+<div class="header-info">
+    <div class="business-info">
+        <h1>Laundry Care</h1>
+        <p>2 Tottenham Road</p>
+        <p>Parkgate</p>
+        <p>Cornubia</p>
+    </div>
+    <div class="contact-info">
+        <p>Email: donovanmark14@gmail.com</p>
+          <p>Email: laundry_care@outlook.com</p>
+        <a href="https://www.laundrycare.co.za" target="_blank" style="color: #ffffff;">www.laundrycare.co.za</a>
+        <p>Cell: 062 283 9374</p>
+        <p>Cell: 069 780 0340</p>
+    </div>
+</div>
+
+<div class="recipient-info">
+    <p><strong>To:</strong> Umhlanga Accommodation,</p>
+    <p>Penny Underwood</p>
+    <p>Shop 14, Chartwell Centre</p>
+    <p>Umhlanga Rocks</p>
+</div>
+
+<h2 class="statement-title"><u>Monthly Statement</u></h2>
+<p class="tagline">"A FRESH START IN EVERY WASH"</p>
+
+<div class="date-period-container" style="
+    margin: 20px auto;
+    width: fit-content;
+    background: rgba(255,255,255,0.08);
+    border: 2px solid rgba(255,255,255,0.25);
+    border-radius: 16px;
+    padding: 18px 28px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    backdrop-filter: blur(6px);
+">
+    <p style="margin:0 0 8px 0; font-size:13px; letter-spacing:1px; text-transform:uppercase; opacity:0.75;">Statement Period</p>
+    <input
+        type="text"
+        id="statementDates"
+        class="no-print"
+        placeholder="e.g. 01 March 2026 — 31 March 2026"
+        autocomplete="off"
+        style="
+            font-size: 17px;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            padding: 12px 18px;
+            border-radius: 10px;
+            border: 2px solid #2575fc;
+            text-align: center;
+            color: #1a1a2e;
+            width: 380px;
+            outline: none;
+            box-shadow: 0 2px 8px rgba(37,117,252,0.15);
+        "
+    >
+
+    <div id="statementDatesPrint" class="statement-dates-print" style="
+    font-size:17px;
+    font-weight:bold;
+    font-family:Arial,sans-serif;
+    text-align:center;
+    color:white;
+    margin-top:4px;
+"></div>
+
+    <div id="monthSuggestions" style="
+        display:none;
+        position:absolute;
+        background:white;
+        color:#333;
+        border:2px solid #2575fc;
+        border-radius:10px;
+        margin-top:4px;
+        width:420px;
+        box-shadow:0 4px 16px rgba(0,0,0,0.15);
+        z-index:999;
+        text-align:left;
+        overflow:hidden;
+    "></div>
+</div>
+
+<script>
+(function() {
+    const months = ["January","February","March","April","May","June",
+                    "July","August","September","October","November","December"];
+    const year   = new Date().getFullYear();
+    const input  = document.getElementById('statementDates');
+    const box    = document.getElementById('monthSuggestions');
+
+    function getSuggestions(val) {
+        const lower = val.toLowerCase();
+        return months.filter(m => m.toLowerCase().startsWith(lower));
+    }
+
+    function buildRange(month) {
+        const idx  = months.indexOf(month);
+        const days = new Date(year, idx + 1, 0).getDate();
+        return `01 ${month} ${year} — ${days} ${month} ${year}`;
+    }
+
+    input.addEventListener('input', function() {
+        const val = this.value.trim();
+        if (!val) { box.style.display = 'none'; return; }
+        const matches = getSuggestions(val);
+        if (!matches.length) { box.style.display = 'none'; return; }
+        box.innerHTML = matches.map(m =>
+            `<div onclick="document.getElementById('statementDates').value='${buildRange(m)}';
+                           document.getElementById('monthSuggestions').style.display='none';"
+                  style="padding:10px 16px;cursor:pointer;font-size:15px;font-weight:bold;
+                         border-bottom:1px solid #eee;"
+                  onmouseover="this.style.background='#f0f4ff'"
+                  onmouseout="this.style.background='white'">
+                📅 ${buildRange(m)}
+            </div>`
+        ).join('');
+        box.style.display = 'block';
+    });
+
+    document.addEventListener('click', function(e) {
+        if (e.target !== input) box.style.display = 'none';
+    });
+})();
+</script>

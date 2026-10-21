@@ -1,0 +1,83 @@
+/* ============================================================
+   css/buttons.css — All button styles
+   Edit button colours, sizes, hover effects here
+   ============================================================ */
+
+/* Default button */
+button {
+    background: linear-gradient(to right, #8e44ad, #c0392b);
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+    margin-top: 20px;
+}
+
+button:hover {
+    background: linear-gradient(to right, #c0392b, #8e44ad);
+    transform: scale(1.05);
+}
+
+/* Statement action buttons */
+.small-green-btn {
+    background: linear-gradient(to right, #1a237e, #283593);
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+    width: auto;
+    margin-top: 10px;
+    margin-left: 20px;
+}
+
+.small-green-btn:hover {
+    background: linear-gradient(to right, #283593, #1a237e);
+    transform: scale(1.05);
+}
+
+/* Print button */
+.print-btn {
+    background: linear-gradient(to right, #1a3c74, #263d53);
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+    margin-top: 20px;
+    display: inline-block;
+}
+
+.print-btn:hover {
+    background: linear-gradient(to right, #263d53, #1a3c74);
+    transform: scale(1.05);
+}
+
+/* Back button */
+.back-button {
+    background: linear-gradient(to right, #1a3c74, #263d53);
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+    margin-top: 20px;
+}
+
+.back-button:hover {
+    background: linear-gradient(to right, #263d53, #1a3c74);
+    transform: scale(1.05);
+}

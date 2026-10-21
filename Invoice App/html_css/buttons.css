@@ -1,0 +1,277 @@
+/* ============================================================
+   css/buttons.css — All button styles
+   Edit individual button colours and hover effects here
+   ============================================================ */
+
+button {
+    cursor: pointer;
+    transition: color 0.3s 0.1s ease-out, transform 0.2s;
+    border-radius: 25px;
+    margin: 6px;
+}
+
+/* ── Shared UIverse base ── */
+.uv-btn {
+    position: relative;
+    padding: 10px 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 25px;
+    outline: none;
+    overflow: hidden;
+    transition: color 0.3s 0.1s ease-out;
+    background: transparent;
+    box-shadow: none;
+    margin: 6px;
+    white-space: nowrap;
+}
+
+.uv-btn::before {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    margin: auto;
+    content: '';
+    border-radius: 50%;
+    display: block;
+    width: 20em;
+    height: 20em;
+    left: -5em;
+    text-align: center;
+    transition: box-shadow 0.5s ease-out;
+    z-index: 0;
+}
+
+.uv-btn:hover::before { box-shadow: inset 0 0 0 12em var(--btn-fill); }
+.uv-btn:hover { color: white !important; }
+
+.uv-btn span, .uv-icon {
+    position: relative;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.uv-icon {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    stroke: currentColor;
+}
+
+/* ── Individual button colours ── */
+button.add-item    { border: 2px solid #4CAF50; color: #4CAF50; --btn-fill: #4CAF50; }
+button.remove-item { border: 2px solid #f44336; color: #f44336; --btn-fill: #f44336; }
+button.print-btn   { border: 2px solid #2196F3; color: #2196F3; --btn-fill: #2196F3; }
+button.custom-item { border: 2px solid #f59e0b; color: #c07a00; --btn-fill: #f59e0b; }
+#comboAddBtn       { border: 2px solid #8b5cf6; color: #8b5cf6; --btn-fill: #8b5cf6; }
+#insertImageBtn    { border: 2px solid #06b6d4; color: #06b6d4; --btn-fill: #06b6d4; }
+
+#saveInvoiceBtn {
+    border: 2px solid #6a11cb;
+    color: #6a11cb;
+    --btn-fill: #6a11cb;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.submit-btn { all: unset; }
+
+/* ── Monthly Statements animated button ── */
+.monthly-statements-btn {
+    --btn-bg: linear-gradient(to right, #11998e, #38ef7d);
+    --width: 160px;
+    --height: 45px;
+    --icon-size: 18px;
+    border: 0;
+    min-width: var(--width);
+    min-height: var(--height);
+    border-radius: var(--height);
+    background: rgba(0,0,0,0.3);
+    color: #fff;
+    font-family: 'Segoe UI', Arial, sans-serif !important;
+    font-weight: 600 !important;
+    font-size: 15px !important;
+    letter-spacing: normal !important;
+    cursor: pointer;
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 16px;
+    position: relative;
+}
+
+.monthly-statements-btn .text,
+.monthly-statements-btn .icon-container { position: relative; z-index: 2; }
+
+.monthly-statements-btn .icon-container {
+    width: calc(var(--icon-size) * 2);
+    height: var(--icon-size);
+    margin-left: 10px;
+    overflow: hidden;
+    transition: transform 500ms ease;
+    position: relative;
+}
+
+.monthly-statements-btn .icon {
+    width: var(--icon-size);
+    height: var(--icon-size);
+    position: absolute;
+    top: 0; left: 0;
+    transition: transform 500ms ease, opacity 250ms ease;
+}
+
+.monthly-statements-btn .icon--left { transform: translateX(-100%); opacity: 0; }
+.monthly-statements-btn .icon svg { width: 100%; height: 100%; fill: #fff; }
+
+.monthly-statements-btn::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--btn-bg);
+    border-radius: var(--height);
+    z-index: 1;
+    transition: transform 500ms ease;
+}
+
+.monthly-statements-btn:hover::after  { transform: translateX(75%); }
+.monthly-statements-btn:hover .icon-container { transform: translateX(55%); }
+.monthly-statements-btn:hover .icon--left { transform: translateX(0); opacity: 1; }
+
+/* ── Combo modal buttons ── */
+.modern-btn {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 12px 28px;
+    border: none;
+    border-radius: 10px;
+    transition: all 0.25s ease;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+    color: white;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.modern-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 10px;
+    z-index: -1;
+    transition: opacity 0.3s ease;
+    opacity: 0;
+}
+
+.modern-btn:hover::before { opacity: 1; }
+.modern-btn.cancel  { background: linear-gradient(135deg, #ff416c, #ff4b2b); }
+.modern-btn.cancel::before { background: linear-gradient(135deg, #ff6a89, #ff7250); }
+.modern-btn.confirm { background: linear-gradient(135deg, #00b09b, #96c93d); }
+.modern-btn.confirm::before { background: linear-gradient(135deg, #22d7b8, #b4e84a); }
+.modern-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
+
+/* ── Prev/Next generic buttons ── */
+button.prev  { background: linear-gradient(45deg, #9E9E9E, #757575); color: white; }
+button.prev:hover  { background: linear-gradient(45deg, #757575, #616161); transform: scale(1.05); }
+button.next  { background: linear-gradient(45deg, #8BC34A, #7CB342); color: white; }
+button.next:hover  { background: linear-gradient(45deg, #7CB342, #689F38); transform: scale(1.05); }
+button.clear-all { background: linear-gradient(45deg, #FF9800, #FB8C00); color: white; }
+button.clear-all:hover { background: linear-gradient(45deg, #FB8C00, #F57C00); transform: scale(1.05); }
+
+/* ── Button row layout ── */
+.btn-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    margin: 12px auto 6px;
+    width: 90%;
+}
+
+.save-row {
+    display: flex;
+    justify-content: center;
+    margin: 10px auto 4px;
+}
+
+.save-row #saveInvoiceBtn {
+    padding: 11px 36px;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+/* ── Checklist button ── */
+#checklistBtn { border: 2px solid #1d4ed8; color: #1d4ed8; --btn-fill: #1d4ed8; }
+
+/* ── Monthly Statements — moved to fixed bottom-right FAB ── */
+.monthly-statements-fab {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 9000;
+    background: linear-gradient(135deg, #11998e, #38ef7d);
+    color: #fff;
+    border: none;
+    border-radius: 28px;
+    padding: 13px 20px;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 0 6px 24px rgba(17,153,142,0.45);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
+    white-space: nowrap;
+}
+.monthly-statements-fab:hover {
+    transform: translateY(-2px) scale(1.04);
+    box-shadow: 0 10px 32px rgba(17,153,142,0.55);
+    filter: brightness(1.08);
+}
+.monthly-statements-fab:active { transform: scale(0.97); }
+
+/* ── Icon-only action buttons that expand to the right on hover ── */
+.mode-row {
+    display: flex;
+    justify-content: center;
+    margin: 14px auto 0;
+}
+
+.btn-row .uv-btn,
+.mode-row .uv-btn {
+    height: 44px;
+    padding: 0 11px;
+    gap: 0;
+    justify-content: flex-start;
+    transition: color 0.3s 0.1s ease-out, padding 0.3s ease;
+}
+
+.btn-row .uv-btn span,
+.mode-row .uv-btn span {
+    max-width: 0;
+    opacity: 0;
+    margin-left: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    transition: max-width 0.35s ease, opacity 0.25s ease, margin 0.35s ease;
+}
+
+.btn-row .uv-btn:hover span,
+.btn-row .uv-btn:focus-visible span,
+.mode-row .uv-btn:hover span,
+.mode-row .uv-btn:focus-visible span {
+    max-width: 140px;
+    opacity: 1;
+    margin-left: 8px;
+    margin-right: 4px;
+}

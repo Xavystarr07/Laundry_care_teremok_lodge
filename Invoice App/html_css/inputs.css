@@ -1,0 +1,110 @@
+/* ============================================================
+   css/inputs.css — All input and select field styles
+   Edit field sizing, borders, readonly styles here
+   ============================================================ */
+
+input {
+    width: 100%;
+    margin: 10px auto;
+    display: block;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    font-size: inherit;
+    background-color: white;
+    color: black;
+    cursor: pointer;
+}
+
+select:disabled {
+    background-color: white !important;
+    color: black !important;
+    opacity: 1 !important;
+    cursor: default;
+    -webkit-text-fill-color: black;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23666'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: 28px;
+}
+
+input[readonly] {
+    background-color: white;
+    color: black;
+    cursor: default;
+}
+
+/* Invoice number input */
+.invoice-input {
+    display: inline-block;
+    font-size: 26px;
+    font-weight: bold;
+    color: #333;
+    width: 130px;
+    vertical-align: middle;
+}
+
+h2 input#invoice_number.invoice-input {
+    font: inherit;
+    background-color: transparent !important;
+    color: black !important;
+    border: none !important;
+    outline: none !important;
+    font-size: 1.2em;
+    width: 130px;
+    letter-spacing: 3px;
+}
+
+/* Hide number spinners */
+.invoice-input::-webkit-outer-spin-button,
+.invoice-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.invoice-input[type=number] { -moz-appearance: textfield; }
+
+/* Validation colours */
+.invalid {
+    border-color: #e74c3c !important;
+    box-shadow: 0 0 0 2px rgba(231,76,60,0.18) !important;
+}
+
+.field-ok {
+    border-color: #2ecc71 !important;
+    box-shadow: 0 0 0 2px rgba(46,204,113,0.25) !important;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Search bar */
+.search-container {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    background: transparent;
+    padding: 8px;
+    border-radius: 25px;
+    width: 300px;
+    cursor: pointer;
+}
+
+.search-container input {
+    background: transparent;
+    cursor: pointer;
+    border: none;
+    padding: 8px;
+    outline: none;
+    font-size: 14px;
+    width: 100px;
+    border-radius: 25px;
+}
