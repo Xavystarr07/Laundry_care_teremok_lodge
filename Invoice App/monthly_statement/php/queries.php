@@ -7,7 +7,7 @@
 function getUnitStatement($pdo, $hotelName) {
     $stmt = $pdo->prepare('
         SELECT "HotelNumber", SUM("Total") AS "UnitTotal"
-        FROM invoices
+        FROM teremok_invoices
         WHERE "HotelName" = :hotel
         GROUP BY "HotelNumber"
         ORDER BY CAST("HotelNumber" AS INTEGER) ASC
@@ -21,7 +21,7 @@ function getUnitStatement($pdo, $hotelName) {
 function getMonthlyStatement($pdo) {
     $stmt = $pdo->query('
         SELECT "HotelName", SUM("Total") AS "HotelTotal"
-        FROM invoices
+        FROM teremok_invoices
         GROUP BY "HotelName"
         ORDER BY "HotelName" ASC
     ');
@@ -33,7 +33,7 @@ function getMonthlyStatement($pdo) {
 function getWeeklyStatement($pdo, $hotelName, $startDate, $endDate) {
     $stmt = $pdo->prepare('
         SELECT "HotelNumber", SUM("Total") AS "UnitTotal"
-        FROM invoices
+        FROM teremok_invoices
         WHERE "HotelName" = :hotel
           AND "DateReceived" BETWEEN :start AND :end
         GROUP BY "HotelNumber"
@@ -48,7 +48,7 @@ function getWeeklyStatement($pdo, $hotelName, $startDate, $endDate) {
 function getWeeklyAllStatement($pdo, $startDate, $endDate) {
     $stmt = $pdo->prepare('
         SELECT "HotelName", SUM("Total") AS "HotelTotal"
-        FROM invoices
+        FROM teremok_invoices
         WHERE "DateReceived" BETWEEN :start AND :end
         GROUP BY "HotelName"
         ORDER BY "HotelName" ASC

@@ -17,7 +17,7 @@ try {
     $dsn = "pgsql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . DB_NAME;
     $pdo = new PDO($dsn, DB_USER, DB_PASS, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
 
-    $stmt = $pdo->prepare('SELECT COUNT(*) FROM invoices WHERE "InvoiceNumber" = :num');
+    $stmt = $pdo->prepare('SELECT COUNT(*) FROM teremok_invoices WHERE "InvoiceNumber" = :num');
     $stmt->execute([':num' => $number]);
     $count = (int) $stmt->fetchColumn();
 

@@ -44,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['save_invoice'])) {
     $grandTotal   = floatval($_POST['grandTotal'] ?? 0);
 
     // ── Check for duplicate ───────────────────────────────────────────────────
-    $check = $pdo->prepare('SELECT COUNT(*) FROM invoices WHERE "InvoiceNumber" = :num');
+    $check = $pdo->prepare('SELECT COUNT(*) FROM teremok_invoices WHERE "InvoiceNumber" = :num');
     $check->execute([':num' => $invoiceNumber]);
     if ($check->fetchColumn() > 0) {
         $_SESSION['popup'] = [

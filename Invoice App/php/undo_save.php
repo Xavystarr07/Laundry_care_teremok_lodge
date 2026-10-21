@@ -16,7 +16,7 @@ try {
 
     $ids = array_map('intval', $ls['ids']);
     $ph  = implode(',', array_fill(0, count($ids), '?'));
-    $del = $pdo->prepare("DELETE FROM invoices WHERE id IN ($ph)");
+    $del = $pdo->prepare("DELETE FROM teremok_invoices WHERE id IN ($ph)");
     $del->execute($ids);
 } catch (Exception $e) {
     error_log('undo_save: ' . $e->getMessage());

@@ -210,8 +210,8 @@ window._pendingPopup = <?php echo json_encode($popup); ?>;
 
     <!-- ── Grand Total — centred, well below save button ── -->
     <div class="grand-total-row">
-        <h3>Grand Total: R<span id="grandTotal">0.00</span></h3>
         <input type="hidden" name="grandTotal" id="grandTotalInput" value="0.00">
+<input type="hidden" name="items" id="itemsJson">
     </div>
 
     <!-- ── Image Preview — left-aligned, below grand total ── -->

@@ -99,7 +99,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
-            // All good — let the form submit normally (page refresh)
+            const items = [];
+document.querySelectorAll('#invoiceTable tr').forEach(r => items.push({
+    code: r.querySelector('.code')?.value || '',
+    description: r.querySelector('.description')?.value || '',
+    price: r.querySelector('.price')?.value || 0,
+    quantity: r.querySelector('.quantity')?.value || 0,
+    total: r.querySelector('.total')?.value || 0
+}));
+document.getElementById('itemsJson').value = JSON.stringify(items);
         });
     }
 
