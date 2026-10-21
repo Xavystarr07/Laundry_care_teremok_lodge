@@ -259,7 +259,7 @@ function pendingSteps() {
     if (inv) list.push(inv);
 
     const row1 = document.querySelector('#invoiceTable tr');
-    [['date', '.date-received', 'Date received'], ['hotel', '.hotel', 'Hotel']].forEach(([field, sel, label]) => {
+    [['date', '.date-received', 'Date received']].forEach(([field, sel, label]) => {
         const el = row1?.querySelector(sel);
         if (el && !confirmed.has(field) && !skipped.has(el)) list.push({ field, el, label, confirm: true });
     });

@@ -242,6 +242,7 @@ window._pendingPopup = <?php echo json_encode($popup); ?>;
 <script src="js/imageInsert.js"></script>     <!-- image insert feature        -->
 <script src="js/themeSearch.js"></script>     <!-- theme/search feature        -->
 <script src="js/checklist.js"></script>
+<script src="js/teremokDefaults.js"></script>
 <script src="js/undoSave.js"></script>       <!-- checklist feature           -->
 
 </body>

@@ -232,10 +232,10 @@ function printStatement() {
             </div>
 
             <div class="print-recipient">
-                <p><strong>To:</strong> Umhlanga Accommodation,</p>
-                <p>Penny Underwood</p>
-                <p>Shop 14, Chartwell Centre</p>
-                <p>Umhlanga Rocks</p>
+                <p><strong>To:</strong> Teremok Lodge,</p>
+                <p>49 Marine Dr</p>
+                <p>Umhlanga, uMhlanga</p>
+                <p>4319</p>
             </div>
 
             <div class="print-title">Monthly Statement</div>

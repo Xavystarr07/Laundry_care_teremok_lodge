@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         flashGreen(e.target);
-        setTimeout(() => getR1('.hotel')?.focus(), 80);
+        setTimeout(() => getR1('.code')?.focus(), 80);
     });
 
     // ═══════════════════════════════════════════════════

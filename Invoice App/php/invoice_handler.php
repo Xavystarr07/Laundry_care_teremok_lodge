@@ -75,20 +75,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['save_invoice'])) {
     }
 
     // ── Insert ────────────────────────────────────────────────────────────────
-    try {
-        $stmt = $pdo->prepare('
-            INSERT INTO invoices ("InvoiceNumber", "HotelName", "HotelNumber", "DateReceived", "Total")
-            VALUES (:inv, :hotel, :unit, :date, :total)
-            RETURNING id
-        ');
-        $stmt->execute([
-            ':inv'   => $invoiceNumber,
-            ':hotel' => $hotelName,
-            ':unit'  => $hotelNumber,
-            ':date'  => $dateReceived,
-            ':total' => $grandTotal,
-        ]);
-        $_SESSION['last_save'] = ['type' => 'regular', 'ids' => [(int)$stmt->fetchColumn()], 'time' => time()];
+   try {
+    $pdo->beginTransaction();
+    $period = $pdo->query('SELECT id FROM teremok_periods WHERE is_closed = FALSE ORDER BY id LIMIT 1')->fetchColumn();
+    if (!$period) throw new Exception('No open billing period.');
+
+    $stmt = $pdo->prepare('
+        INSERT INTO teremok_invoices ("InvoiceNumber", "HotelName", "HotelNumber", "DateReceived", "Total", period_id)
+        VALUES (:inv, :hotel, :unit, :date, :total, :per)
+        RETURNING id
+    ');
+    $stmt->execute([
+        ':inv' => $invoiceNumber, ':hotel' => $hotelName, ':unit' => $hotelNumber,
+        ':date' => $dateReceived, ':total' => $grandTotal, ':per' => $period,
+    ]);
+    $newId = (int)$stmt->fetchColumn();
+
+    $items = json_decode($_POST['items'] ?? '[]', true) ?: [];
+    $ins = $pdo->prepare('INSERT INTO teremok_invoice_items (invoice_id, "Code", "Description", "Price", "Quantity", "LineTotal") VALUES (?,?,?,?,?,?)');
+    foreach ($items as $it) {
+        $ins->execute([$newId, $it['code'], $it['description'], floatval($it['price']), intval($it['quantity']), floatval($it['total'])]);
+    }
+    $pdo->commit();
+
+    $_SESSION['last_save'] = ['type' => 'regular', 'ids' => [$newId], 'time' => time()];
 
         $_SESSION['popup'] = [
             'type' => 'success',

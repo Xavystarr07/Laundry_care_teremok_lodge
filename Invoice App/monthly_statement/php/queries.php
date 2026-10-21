@@ -10,7 +10,7 @@ function getUnitStatement($pdo, $hotelName) {
         FROM teremok_invoices
         WHERE period_id = (SELECT id FROM teremok_periods WHERE is_closed = FALSE ORDER BY id LIMIT 1) AND "HotelName" = :hotel
         GROUP BY "HotelNumber"
-        ORDER BY CAST("HotelNumber" AS INTEGER) ASC
+        ORDER BY "HotelNumber" ASC
     ');
     $stmt->execute([':hotel' => $hotelName]);
     $rows  = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -19,7 +19,9 @@ function getUnitStatement($pdo, $hotelName) {
 }
 
 function getMonthlyStatement($pdo) {
+    
     $stmt = $pdo->query('
+            WHERE period_id = (SELECT id FROM teremok_periods WHERE is_closed = FALSE ORDER BY id LIMIT 1)
         SELECT "HotelName", SUM("Total") AS "HotelTotal"
         FROM teremok_invoices
         GROUP BY "HotelName"
@@ -37,7 +39,7 @@ function getWeeklyStatement($pdo, $hotelName, $startDate, $endDate) {
         WHERE period_id = (SELECT id FROM teremok_periods WHERE is_closed = FALSE ORDER BY id LIMIT 1) AND "HotelName" = :hotel
           AND "DateReceived" BETWEEN :start AND :end
         GROUP BY "HotelNumber"
-        ORDER BY CAST("HotelNumber" AS INTEGER) ASC
+        ORDER BY "HotelNumber" ASC
     ');
     $stmt->execute([':hotel' => $hotelName, ':start' => $startDate, ':end' => $endDate]);
     $rows  = $stmt->fetchAll(PDO::FETCH_ASSOC);
