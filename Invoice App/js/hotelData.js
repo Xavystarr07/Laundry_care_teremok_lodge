@@ -1,7 +1,7 @@
 // hotelData.js - Hotel names and their associated unit numbers
 
 const hotelUnitMap = {
-    "Teremok Lodge": [All],
+    "Teremok Lodge": [],
 };
 
 // Returns the full hotel options HTML string (used when building rows dynamically)

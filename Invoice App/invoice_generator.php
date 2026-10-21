@@ -230,7 +230,7 @@ window._pendingPopup = <?php echo json_encode($popup); ?>;
 <script src="js/fieldGuide.js"></script>      <!-- field highlight guide       -->
 <script src="js/grandTotal.js"></script>      <!-- grand total calculator      -->
 <script src="js/rowManager.js"></script>
-<script src="js/rowRemove.js"></script>      <!-- add/remove table rows       -->
+      <!-- add/remove table rows       -->
 <script src="js/comboModal.js"></script>      <!-- combo selection modal       -->
 <script src="js/codeSearch.js"></script>      <!-- item code autocomplete      -->
 <script src="js/printInvoice.js"></script>    <!-- print function              -->

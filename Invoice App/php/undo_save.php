@@ -24,4 +24,4 @@ try {
     exit;
 }
 unset($_SESSION['last_save']);
-echo json_encode(['ok' => true, 'redirect' => $redirect]);
+echo json_encode(['ok' => true, 'redirect' => 'invoice_generator.php']);
