@@ -13,7 +13,7 @@ require_once 'php/queries.php';
 
 handlePostActions();
 
-$action    = $_SESSION['action']    ?? '';
+$action = 'monthlyStatement';    ?? '';
 $hotelName = $_SESSION['hotelName'] ?? '';
 $startDate = $_SESSION['startDate'] ?? '';
 $endDate   = $_SESSION['endDate']   ?? '';
@@ -69,7 +69,7 @@ if ($action === 'weeklyAll' && $startDate && $endDate) {
     <?php include 'partials/header.html'; ?>
 
     <!-- Hotel form + buttons: edit partials/hotel_form.html -->
-    <?php include 'partials/hotel_form.html'; ?>
+    
 
 
     <!-- ══════════════════════════════════════════════════════
@@ -111,7 +111,7 @@ if ($action === 'weeklyAll' && $startDate && $endDate) {
     <!-- ══════════════════════════════════════════════════════
          MONTHLY STATEMENT — all hotels grouped
          ══════════════════════════════════════════════════════ -->
-    <?php if ($action === 'monthlyStatement' && $monthlyData): ?>
+    
         <table id="statementTable">
             <thead>
                 <tr>
@@ -130,29 +130,37 @@ if ($action === 'weeklyAll' && $startDate && $endDate) {
 
                     <!-- Hidden base total value for grandTotal.js to read -->
                     <tr style="display:none;">
-                        <td id="baseTotalValue" data-value="<?= $monthlyData['total'] ?>"></td>
+                <?php if ($action === 'monthlyStatement' && $monthlyData): ?>
+    <table id="statementTable">
+        <thead>
+            <tr><th>Date</th><th>Invoice No</th><th>Amount</th></tr>
+        </thead>
+        <tbody>
+            <?php if (!empty($monthlyData['rows'])): ?>
+                <?php foreach ($monthlyData['rows'] as $row): ?>
+                    <tr>
+                        <td><?= htmlspecialchars($row['DateReceived']) ?></td>
+                        <td><?= htmlspecialchars($row['InvoiceNumber']) ?></td>
+                        <td>R <?= number_format($row['Total'], 2) ?></td>
                     </tr>
-
-                    <!-- Fuel Levy Row 
-                    <tr id="fuelCostRow">
-                        <td><strong>Standard Fuel Levy</strong></td>
-                        <td>R <input type="number" id="fuelCost" value="0.00" step="0.01" oninput="updateGrandTotal()"></td>
-                    </tr> -->
-
-                    <!-- Grand Total Row (updated by grandTotal.js) -->
-                    <tr class="grand-total-row">
-                        <td><strong>Grand Total</strong></td>
-                        <td id="grandTotalCell"><strong>R <?= number_format($monthlyData['total'], 2) ?></strong></td>
-                    </tr>
-
-                    <?php include 'partials/banking.html'; ?>
-                <?php else: ?>
-                    <tr><td colspan="2">No invoices found.</td></tr>
-                <?php endif; ?>
-            </tbody>
-        </table>
+                <?php endforeach; ?>
+                <tr class="grand-total-row">
+                    <td><strong>Grand Total</strong></td>
+                    <td></td>
+                    <td><strong>R <?= number_format($monthlyData['total'], 2) ?></strong></td>
+                </tr>
+                <?php include 'partials/banking.html'; ?>
+            <?php else: ?>
+                <tr><td colspan="3">No invoices found.</td></tr>
+            <?php endif; ?>
+        </tbody>
+    </table>
+    <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
         <input type="button" value="🖨️ Print Statement" onclick="printStatement()" class="print-btn">
-    <?php endif; ?>
+        <button type="button" class="back-button" onclick="goToInvoiceGenerator()">⟵ Back to Invoice</button>
+        <button type="button" class="small-green-btn" onclick="exportExcel()" style="margin-left:0;">📊 Excel</button>
+    </div>
+<?php endif; ?>
 
 
     <!-- ══════════════════════════════════════════════════════
@@ -238,7 +246,9 @@ if ($action === 'weeklyAll' && $startDate && $endDate) {
             setTimeout(() => { toast.remove(); }, 3000);
         });
     </script>    <!-- fuel levy calculator    -->
-    <script src="js/print.js"></script>         <!-- print function          -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="js/print.js"></script>
+<script src="js/excel.js"></script>         <!-- print function          -->
     <script src="js/navigation.js"></script>    <!-- back button navigation  -->
 
 </body>

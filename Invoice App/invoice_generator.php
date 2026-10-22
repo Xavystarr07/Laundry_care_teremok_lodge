@@ -36,7 +36,7 @@ if (isset($_SESSION['popup'])) {
     <link rel="stylesheet" href="html_css/buttons.css">  <!-- all buttons             -->
     <link rel="stylesheet" href="html_css/image.css">    <!-- image preview bar       -->
     <link rel="stylesheet" href="html_css/print.css">
-    <link rel="stylesheet" href="html_css/combo.css">    <!-- print / light mode fix  -->
+        <!-- print / light mode fix  -->
 </head>
 <body>
 
@@ -148,14 +148,6 @@ window._pendingPopup = <?php echo json_encode($popup); ?>;
             <span>Custom</span>
         </button>
 
-        <!-- Add Combo — indigo + grid icon -->
-        <button type="button" class="uv-btn" id="comboAddBtn">
-            <svg class="uv-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>
-            </svg>
-            <span>Add Combo</span>
-        </button>
-
         <!-- Insert Image — teal + image icon -->
         <button type="button" class="uv-btn" id="insertImageBtn">
             <svg class="uv-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -185,32 +177,10 @@ window._pendingPopup = <?php echo json_encode($popup); ?>;
         </button>
     </div>
 
-    <!-- ── Combo Modal ── -->
-    <div id="comboModal">
-      <div class="cm-box">
-        <div class="cm-head">
-          <div class="cm-icon">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-          </div>
-          <div>
-            <h3>Add Combo</h3>
-            <p>Tick one or more combos, then press Enter</p>
-          </div>
-        </div>
-        <div id="categoryContainer"></div>
-        <div class="cm-foot">
-          <span id="comboCount">Nothing selected yet</span>
-          <div>
-            <button id="comboCancelBtn" type="button" class="cm-btn cm-cancel">Cancel</button>
-            <button id="comboConfirmBtn" type="button" class="cm-btn cm-confirm">Enter</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <!-- ── Grand Total — centred, well below save button ── -->
     <div class="grand-total-row">
-        <input type="hidden" name="grandTotal" id="grandTotalInput" value="0.00">
+        <h3>Grand Total: R <span id="grandTotal">0.00</span></h3>
+<input type="hidden" name="grandTotal" id="grandTotalInput" value="0.00">
 <input type="hidden" name="items" id="itemsJson">
     </div>
 
@@ -224,14 +194,13 @@ window._pendingPopup = <?php echo json_encode($popup); ?>;
 
 <!-- ── JS files — edit individual files for each concern ── -->
 <script src="js/priceList.js"></script>       <!-- item price data             -->
-<script src="js/hotelData.js"></script>       <!-- hotel/unit data             -->
-<script src="js/comboData.js"></script>       <!-- combo preset data           -->
+<script src="js/hotelData.js"></script>       <!-- hotel/unit data             -->   <!-- combo preset data           -->
 <script src="js/popupNotify.js"></script>     <!-- success/error popups        -->
 <script src="js/fieldGuide.js"></script>      <!-- field highlight guide       -->
 <script src="js/grandTotal.js"></script>      <!-- grand total calculator      -->
 <script src="js/rowManager.js"></script>
       <!-- add/remove table rows       -->
-<script src="js/comboModal.js"></script>      <!-- combo selection modal       -->
+      <!-- combo selection modal       -->
 <script src="js/codeSearch.js"></script>      <!-- item code autocomplete      -->
 <script src="js/printInvoice.js"></script>    <!-- print function              -->
 <script src="js/navigation.js"></script>      <!-- page navigation + guard     -->
@@ -243,6 +212,7 @@ window._pendingPopup = <?php echo json_encode($popup); ?>;
 <script src="js/themeSearch.js"></script>     <!-- theme/search feature        -->
 <script src="js/checklist.js"></script>
 <script src="js/teremokDefaults.js"></script>
+<script src="js/typeform.js"></script>
 <script src="js/undoSave.js"></script>       <!-- checklist feature           -->
 
 </body>

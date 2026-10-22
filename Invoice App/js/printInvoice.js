@@ -244,5 +244,5 @@ function printInvoice() {
         </body>
         </html>
     `);
-    win.document.close();
+    window._printed = true;
 }

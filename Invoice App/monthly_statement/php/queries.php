@@ -19,16 +19,14 @@ function getUnitStatement($pdo, $hotelName) {
 }
 
 function getMonthlyStatement($pdo) {
-    
     $stmt = $pdo->query('
-            WHERE period_id = (SELECT id FROM teremok_periods WHERE is_closed = FALSE ORDER BY id LIMIT 1)
-        SELECT "HotelName", SUM("Total") AS "HotelTotal"
+        SELECT "InvoiceNumber", "DateReceived", "Total"
         FROM teremok_invoices
-        GROUP BY "HotelName"
-        ORDER BY "HotelName" ASC
+        WHERE period_id = (SELECT id FROM teremok_periods WHERE is_closed = FALSE ORDER BY id LIMIT 1)
+        ORDER BY "DateReceived" ASC, "InvoiceNumber" ASC
     ');
     $rows  = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    $total = array_sum(array_column($rows, 'HotelTotal'));
+    $total = array_sum(array_column($rows, 'Total'));
     return ['rows' => $rows, 'total' => $total];
 }
 
