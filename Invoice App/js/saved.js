@@ -62,8 +62,44 @@ function draw() {
          <label>Date received<input class="in" id="eDate" type="date" value="${cur.date}" ${ro ? 'disabled' : ''}></label></div>
          <table class="mt"><thead><tr><th>Item</th><th class="n">Price</th><th>Qty</th><th class="n">Total</th><th></th></tr></thead><tbody>${rows}</tbody></table>
          ${add}<div class="mtot"><span>Total</span><b>${money(tot)}</b></div>`;
-    $('#mFoot').innerHTML = ro ? '<button type="button" class="btn ghost" data-m="close">Close</button>'
-        : '<button type="button" class="btn red" data-m="del">Delete</button><button type="button" class="btn ghost" data-m="close">Cancel</button><button type="button" class="btn" data-m="save">Save changes</button>';
+    $('#mFoot').innerHTML = ro ? '<button type="button" class="btn ghost" data-m="print">🖨️ Print</button><button type="button" class="btn ghost" data-m="close">Close</button>'
+        : '<button type="button" class="btn red" data-m="del">Delete</button><button type="button" class="btn ghost" data-m="print">🖨️ Print</button><button type="button" class="btn ghost" data-m="close">Cancel</button><button type="button" class="btn" data-m="save">Save changes</button>';
+}
+
+function printSaved() {
+    const tot = cur.items.reduce((s, i) => s + i.price * i.qty, 0);
+    const n = cur.items.reduce((s, i) => s + i.qty, 0);
+    const rows = cur.items.map(i => `<tr><td class="c">${esc(i.code)}</td><td>${esc(i.description)}</td><td class="n">R ${i.price.toFixed(2)}</td><td class="n">${i.qty}</td><td class="n"><b>R ${(i.price * i.qty).toFixed(2)}</b></td></tr>`).join('');
+    const w = window.open('', '_blank', 'width=1000,height=800');
+    if (!w) return toast('Allow pop-ups to print', true);
+    w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${cur.orig}</title><style>
+@page{size:A4;margin:12mm}*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',Arial,sans-serif;color:#1B2533;font-size:13px;padding:8px 10px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.bar{height:8px;background:linear-gradient(90deg,#0D47A1,#2196F3);border-radius:4px;margin-bottom:22px}
+.h{display:flex;justify-content:space-between}h1{font-size:28px;letter-spacing:3px;text-transform:uppercase;color:#111}
+.tag{font-size:10.5px;letter-spacing:2px;color:#1565C0;font-weight:700}p,.ct{line-height:1.6;color:#222;margin-top:8px}.ct{text-align:right;margin:0}
+.t{display:flex;justify-content:space-between;align-items:flex-end;margin:26px 0 14px;padding-bottom:10px;border-bottom:2px solid #111}
+h2{font-size:26px;letter-spacing:6px;font-weight:300;text-transform:uppercase}.no{font-size:24px;font-weight:700;letter-spacing:3px}
+.m{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px}.m div{background:#F3F3F3;border-left:4px solid #1565C0;border-radius:6px;padding:9px 12px}
+.m span{display:block;font-size:10px;letter-spacing:1.3px;text-transform:uppercase;color:#5B6B7F;font-weight:700}.m strong{font-size:14px}
+table{width:100%;border-collapse:collapse}th{background:#111;color:#fff;padding:10px 12px;text-align:left;font-size:11.5px;letter-spacing:1px;text-transform:uppercase}
+td{padding:9px 12px;border-bottom:1px solid #C9D6E6}tbody tr:nth-child(even) td{background:#F7F7F7}.n{text-align:right}th.n{text-align:right}.c{font-family:Consolas,monospace;font-weight:700}
+.g{display:flex;justify-content:flex-end;margin-top:18px}.b{min-width:280px;border:2px solid #111;border-radius:10px;overflow:hidden}
+.b div{display:flex;justify-content:space-between;padding:8px 16px;color:#5B6B7F}.b .gt{background:#0D47A1;color:#fff;padding:13px 16px;font-weight:700}.gt strong{font-size:22px}
+.f{margin-top:34px;padding-top:12px;border-top:1px solid #C9D6E6;text-align:center;color:#5B6B7F}
+</style><link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0f0f1a">
+</head><body><div class="bar"></div>
+<div class="h"><div><h1>Laundry Care</h1><div class="tag">A FRESH START IN EVERY WASH</div><p>2 Tottenham Road<br>Parkgate<br>Cornubia</p></div>
+<div class="ct"><b style="color:#1565C0">www.laundrycare.co.za</b><br>donovanmark14@gmail.com<br>laundry_care@outlook.com<br>062 283 9374<br>069 780 0340</div></div>
+<div class="t"><h2>Invoice</h2><div class="no">${cur.orig}</div></div>
+<div class="m"><div><span>Hotel</span><strong>Teremok Lodge</strong></div><div><span>Unit</span><strong>All</strong></div><div><span>Date received</span><strong>${cur.date}</strong></div></div>
+<table><thead><tr><th>Code</th><th>Description</th><th class="n">Unit Price</th><th class="n">Qty</th><th class="n">Total</th></tr></thead><tbody>${rows}</tbody></table>
+<div class="g"><div class="b"><div><span>Total items</span><span>${n}</span></div><div class="gt"><span>GRAND TOTAL</span><strong>R ${tot.toFixed(2)}</strong></div></div></div>
+<div class="f"><b>Thank you for your business</b></div>
+<script>addEventListener('load',()=>setTimeout(()=>{onafterprint=()=>close();print()},400))<\/script><script>if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');</script>
+</body></html>`);
+    w.document.close();
 }
 
 function addItem() {
@@ -90,6 +126,7 @@ $('#mBody').addEventListener('click', e => {
 $('#mFoot').addEventListener('click', async e => {
     const m = e.target.closest('[data-m]')?.dataset.m; if (!m) return;
     if (m === 'close') $('#m').hidden = true;
+    if (m === 'print') printSaved();
     if (m === 'del' && await del(cur.id)) $('#m').hidden = true;
     if (m === 'save') {
         const r = await api('update', { id: cur.id, num: cur.num, date: cur.date, items: JSON.stringify(cur.items) });

@@ -6,6 +6,8 @@
 <title>Saved invoices — Laundry Care</title>
 <link rel="stylesheet" href="monthly_statement/css/statement.css">
 <link rel="stylesheet" href="html_css/manage.css">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0f0f1a">
 </head>
 <body>
 <main class="wide">
@@ -20,5 +22,6 @@
 <div class="modal" id="m" hidden><div class="mcard"><h2 id="mTitle"></h2><div id="mBody"></div><div class="mfoot" id="mFoot"></div></div></div>
 <script src="js/priceList.php"></script>
 <script src="js/saved.js"></script>
+<script>if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');</script>
 </body>
 </html>

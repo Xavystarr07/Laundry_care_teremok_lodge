@@ -25,6 +25,8 @@ $data  = $cur ? ['name' => $cur['name'], 'start' => $cur['start_date'], 'end' =>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Statements — Laundry Care</title>
 <link rel="stylesheet" href="css/statement.css">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0f0f1a">
 </head>
 <body>
 
@@ -95,6 +97,7 @@ $data  = $cur ? ['name' => $cur['name'], 'start' => $cur['start_date'], 'end' =>
             <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg></i>
             Print / Save PDF
         </button>
+        
         <button type="button" class="act mail" id="xlMail">
             <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></i>
             Email
@@ -169,5 +172,6 @@ $data  = $cur ? ['name' => $cur['name'], 'start' => $cur['start_date'], 'end' =>
 <script src="js/excel.js"></script>
 <?php endif; ?>
 
+<script>if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');</script>
 </body>
 </html>

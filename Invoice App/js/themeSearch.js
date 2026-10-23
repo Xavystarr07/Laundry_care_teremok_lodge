@@ -246,7 +246,7 @@ style.textContent = `
   em.sr-match { background: rgba(167,139,250,0.3); border-radius: 3px; font-style: normal; padding: 0 2px; }
 
   /* ── Roomier search panel, lifted above the 3 buttons ── */
-  #searchPanel { bottom: 250px; width: 400px; max-width: calc(100vw - 48px); border-radius: 20px; }
+  #searchPanel { bottom: 196px; width: 400px; max-width: calc(100vw - 48px); border-radius: 20px; }
   #searchPanelHeader { padding: 16px 18px 12px; gap: 10px; }
   #searchPanelTitle { font-size: 15px; }
   #searchInputWrap { padding: 14px 16px 12px; }

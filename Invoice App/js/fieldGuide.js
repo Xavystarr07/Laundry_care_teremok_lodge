@@ -10,8 +10,8 @@ style.textContent = `
   #fieldGuide {
     --fg-bg:#ffffff; --fg-text:#1f2937; --fg-muted:#6b7280; --fg-line:#e5e7eb; --fg-soft:#f3f4f6;
     --fg-accent:#2563eb; --fg-accent-soft:#dbeafe;
-    position: fixed; left: 24px; bottom: 250px;
-    width: 380px; max-width: calc(100vw - 48px); max-height: calc(100vh - 280px);
+    position: fixed; left: 24px; bottom: 196px;
+    width: 380px; max-width: calc(100vw - 48px); max-height: calc(100vh - 230px);
     background: var(--fg-bg); color: var(--fg-text);
     border: 1px solid var(--fg-line); border-radius: 20px;
     box-shadow: 0 20px 50px rgba(15,23,42,0.22);
@@ -69,7 +69,7 @@ style.textContent = `
 
   /* Help button — blue neon, bottom-left above Switch Mode */
   #fgTinker {
-    position:fixed; left:24px; bottom:192px;
+    position:fixed; left:24px; bottom:136px;
     height:44px; min-width:44px; max-width:44px; padding:0 12px;
     display:flex; flex-direction:row; align-items:center; justify-content:flex-start;
     border-radius:22px; overflow:hidden; cursor:pointer;

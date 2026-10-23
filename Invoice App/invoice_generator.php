@@ -22,6 +22,12 @@ if (isset($_SESSION['popup'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Laundry Care Invoice</title>
+<script>
+if (localStorage.getItem('lcDarkMode') === 'true') {
+    document.write('<style id="dkpre">html{background:#0f0f1a}body{visibility:hidden}</style>');
+    addEventListener('load', function () { document.getElementById('dkpre')?.remove(); });
+}
+</script>
 
     <!-- ── CSS files — edit individual files for each concern ── -->
     <link rel="stylesheet" href="html_css/base.css">     <!-- body, fonts             -->
@@ -32,6 +38,8 @@ if (isset($_SESSION['popup'])) {
     <link rel="stylesheet" href="html_css/image.css">    <!-- image preview bar       -->
     <link rel="stylesheet" href="html_css/print.css">
         <!-- print / light mode fix  -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0f0f1a">
 </head>
 <body>
 
@@ -220,5 +228,6 @@ window._pendingPopup = <?php echo json_encode($popup); ?>;
 <script src="js/typeform.js"></script>
 <script src="js/undoSave.js"></script>       <!-- checklist feature           -->
 
+<script>if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');</script>
 </body>
 </html>

@@ -6,6 +6,8 @@
 <title>Price list — Laundry Care</title>
 <link rel="stylesheet" href="monthly_statement/css/statement.css">
 <link rel="stylesheet" href="html_css/manage.css">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0f0f1a">
 </head>
 <body>
 <main class="wide">
@@ -27,5 +29,6 @@
 </main>
 <div class="modal" id="hm" hidden><div class="mcard"><h2 id="hTitle"></h2><div id="hBody"></div><div class="mfoot"><button type="button" class="btn ghost" id="hClose">Close</button></div></div></div>
 <script src="js/prices.js"></script>
+<script>if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');</script>
 </body>
 </html>

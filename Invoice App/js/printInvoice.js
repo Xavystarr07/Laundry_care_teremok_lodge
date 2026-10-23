@@ -177,7 +177,9 @@ function printInvoice() {
                 .totals-box { border-color: #111; }
                 .footer strong { color: #111; }
             </style>
-        </head>
+        <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0f0f1a">
+</head>
         <body>
 
             <div class="bar"></div>
@@ -241,7 +243,8 @@ function printInvoice() {
                     }, 500);
                 });
             <\/script>
-        </body>
+        <script>if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');</script>
+</body>
         </html>
     `);
     win.document.close();

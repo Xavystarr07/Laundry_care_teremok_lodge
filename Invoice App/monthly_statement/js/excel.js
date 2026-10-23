@@ -1,6 +1,14 @@
 const SEND = { email: '', whatsapp: '' };   // whatsapp like 27821234567 (no + or spaces)
 
 async function exportExcel(mode) {
+    if (mode) {
+        const S = window.STMT;
+        const lg = s => new Date(s + 'T00:00').toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' });
+        const msg = `Hi, please find the Laundry Care statement for ${lg(S.start)} to ${lg(S.end)}. Total: R ${Number(S.total).toFixed(2)}.`;
+        if (mode === 'wa') window.open('https://wa.me/' + SEND.whatsapp + '?text=' + encodeURIComponent(msg), '_blank');
+        else location.href = 'mailto:' + SEND.email + '?subject=' + encodeURIComponent('Laundry Care Statement') + '&body=' + encodeURIComponent(msg);
+        return;
+    }
     const w = mode === 'wa' ? window.open('', '_blank') : null;
     const S = window.STMT, wb = new ExcelJS.Workbook();
     const ws = wb.addWorksheet('Statement', { views: [{ showGridLines: false }], pageSetup: { paperSize: 9, fitToPage: true, fitToWidth: 1, fitToHeight: 0 } });
@@ -61,15 +69,17 @@ async function exportExcel(mode) {
     ws.getRow(3).height = 10;
     ws.getRow(6).height = 14;
 
+    if (!mode) {
     const buf = await wb.xlsx.writeBuffer();
     const a = document.createElement('a');
     a.href = URL.createObjectURL(new Blob([buf], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }));
     a.download = `Teremok_Lodge_Statement_${S.start}_to_${S.end}.xlsx`;
     a.click();
     setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+    }
     const msg = `Hi, please find the Laundry Care statement for ${long(S.start)} to ${long(S.end)}. Total: R ${Number(S.total).toFixed(2)}.`;
     if (w) w.location = 'https://wa.me/' + SEND.whatsapp + '?text=' + encodeURIComponent(msg);
-    else if (mode === 'mail') location.href = 'mailto:' + SEND.email + '?subject=' + encodeURIComponent('Laundry Care Statement') + '&body=' + encodeURIComponent(msg + '\n\nPlease attach the downloaded Excel file.');
+    else if (mode === 'mail') location.href = 'mailto:' + SEND.email + '?subject=' + encodeURIComponent('Laundry Care Statement') + '&body=' + encodeURIComponent(msg);
 }
 const go = m => () => exportExcel(m);
 document.getElementById('xl')?.addEventListener('click', go());
