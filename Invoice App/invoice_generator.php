@@ -6,11 +6,6 @@
 // ============================================================
 session_start();
 
-// No mode chosen yet this session → ask first
-if (!isset($_SESSION['mode'])) {
-    header('Location: welcome.php');
-    exit;
-}
 $_SESSION['mode'] = 'regular';
 
 require_once 'php/undo_helper.php';
@@ -51,7 +46,7 @@ window._pendingPopup = <?php echo json_encode($popup); ?>;
 <?php endif; ?>
 
 <!-- Business header: edit partials/header.html -->
-<?php include 'partials/header.html'; ?>
+
 
 <form id="invoiceForm" method="post" action="php/invoice_handler.php">
 
@@ -88,7 +83,7 @@ window._pendingPopup = <?php echo json_encode($popup); ?>;
             <tr>
                 <td>
                     <!-- Hotel list: edit partials/hotel_select.html -->
-                    <?php include 'partials/hotel_select.html'; ?>
+                    <select class="hotel" name="hotel" id="hotelSelect" onchange="updateUnitDatalist(this)"><option value="Teremok Lodge">Teremok Lodge</option></select>
                 </td>
                 <td>
                     <input type="number" name="unit-number" class="unit-number" placeholder="Unit Number">
@@ -158,6 +153,16 @@ window._pendingPopup = <?php echo json_encode($popup); ?>;
 
 
 
+        <!-- Saved invoices -->
+        <button type="button" class="uv-btn" style="border:2px solid #f43f5e;color:#f43f5e;--btn-fill:#f43f5e" onclick="guardGo('saved.php')">
+            <svg class="uv-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
+            <span>Saved</span>
+        </button>
+        <!-- Price list -->
+        <button type="button" class="uv-btn" style="border:2px solid #65a30d;color:#65a30d;--btn-fill:#65a30d" onclick="guardGo('prices.php')">
+            <svg class="uv-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0L2 12V2h10l8.6 8.6a2 2 0 0 1 0 2.8z"/><circle cx="7" cy="7" r="1.2"/></svg>
+            <span>Prices</span>
+        </button>
         <!-- Checklist -->
         <button type="button" class="uv-btn" id="checklistBtn">
             <svg class="uv-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -193,7 +198,7 @@ window._pendingPopup = <?php echo json_encode($popup); ?>;
 
 
 <!-- ── JS files — edit individual files for each concern ── -->
-<script src="js/priceList.js"></script>       <!-- item price data             -->
+<script src="js/priceList.php"></script>       <!-- item price data             -->
 <script src="js/hotelData.js"></script>       <!-- hotel/unit data             -->   <!-- combo preset data           -->
 <script src="js/popupNotify.js"></script>     <!-- success/error popups        -->
 <script src="js/fieldGuide.js"></script>      <!-- field highlight guide       -->

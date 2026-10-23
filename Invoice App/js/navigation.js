@@ -28,6 +28,13 @@ function navigateToMonthlyStatement() {
 }
 
 // ── Reusable centred confirm dialog ──────────────────────────────────────────
+function guardGo(url) {
+    let any = !!document.getElementById('invoice_number')?.value?.trim();
+    document.querySelectorAll('#invoiceTable tr').forEach(r => { if (r.querySelector('.code')?.value.trim()) any = true; });
+    if (any) showConfirmDialog('⚠️ Unsaved Invoice', "This invoice hasn't been saved yet. If you leave now, all data will be lost.", 'Yes, leave anyway', 'Stay here', () => { window.location.href = url; });
+    else window.location.href = url;
+}
+
 function navigateToWelcome() {
     const invoiceNum = document.getElementById('invoice_number')?.value?.trim();
     let anyData = !!invoiceNum;

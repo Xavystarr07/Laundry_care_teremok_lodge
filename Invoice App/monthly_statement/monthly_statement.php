@@ -1,255 +1,167 @@
 <?php
-// ============================================================
-//  monthly_statement.php — Main entry point
-//  Loads all includes and renders the correct statement section
-//  Add new statement sections at the bottom of <body>
-// ============================================================
-
-session_start();
-
 require_once 'php/db.php';
-require_once 'php/actions.php';
 require_once 'php/queries.php';
 
-handlePostActions();
+function h($s) { return htmlspecialchars((string)$s); }
+function d($s) { return $s ? date('d M Y', strtotime($s)) : ''; }
 
-$action = 'monthlyStatement';    ?? '';
-$hotelName = $_SESSION['hotelName'] ?? '';
-$startDate = $_SESSION['startDate'] ?? '';
-$endDate   = $_SESSION['endDate']   ?? '';
-
-$unitData      = null;
-$monthlyData   = null;
-$weeklyData    = null;
-$weeklyAllData = null;
-
-if ($action === 'viewStatement' && $hotelName) {
-    $unitData = getUnitStatement($pdo, $hotelName);
+$periods = getPeriods($pdo);
+$open = $cur = null;
+$pid = (int)($_GET['p'] ?? 0);
+foreach ($periods as $p) {
+    if (!$p['is_closed']) $open = $p;
+    if ($p['id'] == $pid) $cur = $p;
 }
-if ($action === 'monthlyStatement') {
-    $monthlyData = getMonthlyStatement($pdo);
-}
-if ($action === 'weeklyStatement' && $hotelName && $startDate && $endDate) {
-    $weeklyData = getWeeklyStatement($pdo, $hotelName, $startDate, $endDate);
-}
-if ($action === 'weeklyAll' && $startDate && $endDate) {
-    $weeklyAllData = getWeeklyAllStatement($pdo, $startDate, $endDate);
-}
+$openRows = $open ? getInvoices($pdo, $open['id']) : [];
+$rows  = $cur ? getInvoices($pdo, $cur['id']) : [];
+$total = array_sum(array_column($rows, 'Total'));
+$end   = $cur ? ($cur['end_date'] ?: date('Y-m-d')) : '';
+$data  = $cur ? ['name' => $cur['name'], 'start' => $cur['start_date'], 'end' => $end, 'rows' => $rows, 'total' => $total] : null;
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monthly Statement — Laundry Care</title>
-
-    <!-- ── CSS files — edit individual files for each concern ── -->
-    <link rel="stylesheet" href="css/base.css">       <!-- body, fonts, headings     -->
-    <link rel="stylesheet" href="css/header.css">     <!-- top header layout         -->
-    <link rel="stylesheet" href="css/table.css">      <!-- statement table           -->
-    <link rel="stylesheet" href="css/buttons.css">    <!-- all buttons               -->
-    <link rel="stylesheet" href="css/forms.css">      <!-- dropdowns, date inputs    -->
-    <link rel="stylesheet" href="css/print.css">
-    <link rel="stylesheet" href="css/statement_buttons.css">
-    <style>
-        #db-toast {
-            position: fixed; top: 20px; right: 20px;
-            background: #2ecc71; color: white;
-            padding: 12px 24px; border-radius: 10px;
-            font-weight: bold; font-size: 15px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            z-index: 9999; opacity: 1;
-            transition: opacity 1s ease;
-        }
-    </style>      <!-- print-only styles         -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Statements — Laundry Care</title>
+<link rel="stylesheet" href="css/statement.css">
 </head>
 <body>
 
-    <!-- Business header: edit partials/header.html -->
-    <?php include 'partials/header.html'; ?>
+<?php if (!$cur): ?>
+<main class="home">
+    <a class="back" href="../invoice_generator.php">⟵ Back to invoice</a>
+    <h1>Teremok Lodge <span>Statements</span></h1>
 
-    <!-- Hotel form + buttons: edit partials/hotel_form.html -->
-    
-
-
-    <!-- ══════════════════════════════════════════════════════
-         UNIT STATEMENT — selected hotel, grouped by unit
-         ══════════════════════════════════════════════════════ -->
-    <?php if ($action === 'viewStatement' && $unitData): ?>
-        <table id="statementTable">
-            <thead>
-                <tr>
-                    <th>Hotel Name</th>
-                    <th>Hotel Unit</th>
-                    <th>Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php if (!empty($unitData['rows'])): ?>
-                    <?php foreach ($unitData['rows'] as $row): ?>
-                        <tr>
-                            <td><?= htmlspecialchars($hotelName) ?></td>
-                            <td><?= htmlspecialchars($row['HotelNumber']) ?></td>
-                            <td>R <?= number_format($row['UnitTotal'], 2) ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                    <tr class="grand-total-row">
-                        <td><strong>Grand Total</strong></td>
-                        <td></td>
-                        <td><strong>R <?= number_format($unitData['total'], 2) ?></strong></td>
-                    </tr>
-                    <?php include 'partials/banking.html'; ?>
-                <?php else: ?>
-                    <tr><td colspan="3">No invoices found for this hotel.</td></tr>
-                <?php endif; ?>
-            </tbody>
-        </table>
-        <input type="button" value="🖨️ Print Statement" onclick="printStatement()" class="print-btn">
+    <?php if ($open): ?>
+    <p class="now">Current period: <b><?= h($open['name']) ?></b> · from <?= d($open['start_date']) ?> · <?= count($openRows) ?> invoice<?= count($openRows) == 1 ? '' : 's' ?> · <b>R <?= number_format(array_sum(array_column($openRows, 'Total')), 2) ?></b></p>
     <?php endif; ?>
 
-
-    <!-- ══════════════════════════════════════════════════════
-         MONTHLY STATEMENT — all hotels grouped
-         ══════════════════════════════════════════════════════ -->
-    
-        <table id="statementTable">
-            <thead>
-                <tr>
-                    <th>Hotel Name</th>
-                    <th>Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php if (!empty($monthlyData['rows'])): ?>
-                    <?php foreach ($monthlyData['rows'] as $row): ?>
-                        <tr>
-                            <td><?= htmlspecialchars($row['HotelName']) ?></td>
-                            <td>R <?= number_format($row['HotelTotal'], 2) ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-
-                    <!-- Hidden base total value for grandTotal.js to read -->
-                    <tr style="display:none;">
-                <?php if ($action === 'monthlyStatement' && $monthlyData): ?>
-    <table id="statementTable">
-        <thead>
-            <tr><th>Date</th><th>Invoice No</th><th>Amount</th></tr>
-        </thead>
-        <tbody>
-            <?php if (!empty($monthlyData['rows'])): ?>
-                <?php foreach ($monthlyData['rows'] as $row): ?>
-                    <tr>
-                        <td><?= htmlspecialchars($row['DateReceived']) ?></td>
-                        <td><?= htmlspecialchars($row['InvoiceNumber']) ?></td>
-                        <td>R <?= number_format($row['Total'], 2) ?></td>
-                    </tr>
-                <?php endforeach; ?>
-                <tr class="grand-total-row">
-                    <td><strong>Grand Total</strong></td>
-                    <td></td>
-                    <td><strong>R <?= number_format($monthlyData['total'], 2) ?></strong></td>
-                </tr>
-                <?php include 'partials/banking.html'; ?>
-            <?php else: ?>
-                <tr><td colspan="3">No invoices found.</td></tr>
-            <?php endif; ?>
-        </tbody>
-    </table>
-    <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
-        <input type="button" value="🖨️ Print Statement" onclick="printStatement()" class="print-btn">
-        <button type="button" class="back-button" onclick="goToInvoiceGenerator()">⟵ Back to Invoice</button>
-        <button type="button" class="small-green-btn" onclick="exportExcel()" style="margin-left:0;">📊 Excel</button>
+    <div class="cards">
+        <button type="button" class="card" data-panel="existing">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></svg>
+            <b>Show existing statement</b><small>Choose a month</small>
+        </button>
+        <?php if ($open): ?>
+        <button type="button" class="card" data-panel="capture">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M9 16l2 2 4-4"/></svg>
+            <b>Capture bill</b><small>Pick the cut-off date</small>
+        </button>
+        <?php endif; ?>
     </div>
-<?php endif; ?>
 
+    <section class="panel" id="existing" hidden>
+        <?php foreach ($periods as $p): ?>
+        <a class="prow" href="?p=<?= (int)$p['id'] ?>">
+            <b><?= h($p['name']) ?></b>
+            <span><?= d($p['start_date']) ?> — <?= $p['end_date'] ? d($p['end_date']) : 'ongoing' ?></span>
+            <em class="chip <?= $p['is_closed'] ? 'closed' : 'open' ?>"><?= $p['is_closed'] ? 'Closed' : 'Open' ?></em>
+        </a>
+        <?php endforeach; ?>
+    </section>
 
-    <!-- ══════════════════════════════════════════════════════
-         WEEKLY STATEMENT — selected hotel, date range
-         ══════════════════════════════════════════════════════ -->
-    <?php if ($action === 'weeklyStatement' && $weeklyData): ?>
-        <h3>Weekly Statement — <?= htmlspecialchars($hotelName) ?> (<?= $startDate ?> to <?= $endDate ?>)</h3>
-        <table id="statementTable">
-            <thead>
-                <tr>
-                    <th>Hotel Name</th>
-                    <th>Hotel Unit</th>
-                    <th>Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php if (!empty($weeklyData['rows'])): ?>
-                    <?php foreach ($weeklyData['rows'] as $row): ?>
-                        <tr>
-                            <td><?= htmlspecialchars($hotelName) ?></td>
-                            <td><?= htmlspecialchars($row['HotelNumber']) ?></td>
-                            <td>R <?= number_format($row['UnitTotal'], 2) ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                    <tr class="grand-total-row">
-                        <td><strong>Grand Total</strong></td>
-                        <td></td>
-                        <td><strong>R <?= number_format($weeklyData['total'], 2) ?></strong></td>
-                    </tr>
-                <?php else: ?>
-                    <tr><td colspan="3">No invoices found for this period.</td></tr>
-                <?php endif; ?>
-            </tbody>
-        </table>
-        <input type="button" value="🖨️ Print Statement" onclick="printStatement()" class="print-btn">
-    <?php endif; ?>
-
-
-    <!-- ══════════════════════════════════════════════════════
-         WEEKLY STATEMENT — all hotels, date range
-         ══════════════════════════════════════════════════════ -->
-    <?php if ($action === 'weeklyAll' && $weeklyAllData): ?>
-        <h3>Weekly Statement — All Hotels (<?= $startDate ?> to <?= $endDate ?>)</h3>
-        <table id="statementTable">
-            <thead>
-                <tr>
-                    <th>Hotel Name</th>
-                    <th>Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php if (!empty($weeklyAllData['rows'])): ?>
-                    <?php foreach ($weeklyAllData['rows'] as $row): ?>
-                        <tr>
-                            <td><?= htmlspecialchars($row['HotelName']) ?></td>
-                            <td>R <?= number_format($row['HotelTotal'], 2) ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                    <tr class="grand-total-row">
-                        <td><strong>Grand Total</strong></td>
-                        <td><strong>R <?= number_format($weeklyAllData['total'], 2) ?></strong></td>
-                    </tr>
-                <?php else: ?>
-                    <tr><td colspan="2">No invoices found for this period.</td></tr>
-                <?php endif; ?>
-            </tbody>
-        </table>
-        <input type="button" value="🖨️ Print Statement" onclick="printStatement()" class="print-btn">
-    <?php endif; ?>
-
-
-    <br>
-   
-    <!-- ── JS files — edit individual files for each concern ── -->
-    <script src="js/grandTotal.js"></script>
+    <?php if ($open): ?>
+    <section class="panel" id="capture" hidden>
+        <div class="cap">
+            <div>
+                <p class="lbl">Period starts</p>
+                <p class="big"><?= $open['start_date'] ? d($open['start_date']) : 'First invoice' ?></p>
+                <p class="lbl">Cut-off date</p>
+                <p class="big" id="cutLbl">Pick a date</p>
+                <div id="capInfo"></div>
+                <button type="button" class="btn" id="capGo" disabled style="margin-top:16px">Close period &amp; start next</button>
+            </div>
+            <div id="cal"></div>
+        </div>
+    </section>
     <script>
-        window.addEventListener('DOMContentLoaded', function() {
-            const toast = document.createElement('div');
-            toast.id = 'db-toast';
-            toast.innerText = '✅ Connected to database';
-            document.body.appendChild(toast);
-            setTimeout(() => { toast.style.opacity = '0'; }, 2000);
-            setTimeout(() => { toast.remove(); }, 3000);
-        });
-    </script>    <!-- fuel levy calculator    -->
-    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-<script src="js/print.js"></script>
-<script src="js/excel.js"></script>         <!-- print function          -->
-    <script src="js/navigation.js"></script>    <!-- back button navigation  -->
+    window.CAP = <?= json_encode([
+        'start' => $open['start_date'],
+        'rows'  => array_map(fn($r) => ['d' => $r['DateReceived'], 't' => (float)$r['Total']], $openRows)
+    ], JSON_HEX_TAG) ?>;
+    </script>
+    <?php endif; ?>
+</main>
+<script src="js/statement.js"></script>
+
+<?php else: ?>
+<main class="view">
+    <div class="bar noprint">
+        <a class="btn ghost" href="monthly_statement.php">⟵ Statements</a>
+        <a class="btn ghost" href="../invoice_generator.php">Invoice</a>
+        <?php if (!$cur['is_closed']): ?><em class="chip open">Period still open</em><?php endif; ?>
+        <span class="sp"></span>
+        <button type="button" class="act pdf" onclick="window.print()">
+            <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg></i>
+            Print / Save PDF
+        </button>
+        .act.mail{background:linear-gradient(135deg,#0ea5e9,#2563eb);box-shadow:0 8px 22px rgba(37,99,235,.4)}
+.act.wa{background:linear-gradient(135deg,#25D366,#128C7E);box-shadow:0 8px 22px rgba(18,140,126,.4)}
+.act.pdf{
+            <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M3 15h18M9 4v16"/></svg></i>
+            Download Excel
+        </button>
+    </div>
+
+    <article id="paper">
+        <div class="bar2"></div>
+        <header class="ph">
+            <div class="brand">
+                <h1>Laundry Care</h1>
+                <div class="tag">A FRESH START IN EVERY WASH</div>
+                <p>2 Tottenham Road<br>Parkgate<br>Cornubia</p>
+            </div>
+            <div class="contact">
+                <div class="web">www.laundrycare.co.za</div>
+                <div>donovanmark14@gmail.com</div>
+                <div>laundry_care@outlook.com</div>
+                <div>062 283 9374</div>
+                <div>069 780 0340</div>
+            </div>
+        </header>
+
+        <div class="title">
+            <h2>Statement</h2>
+            <div class="pno"><span>Month</span><strong><?= h($cur['name']) ?></strong></div>
+        </div>
+
+        <div class="meta">
+            <div><span>To</span><strong>Teremok Lodge</strong><em>49 Marine Dr, Umhlanga, 4319</em></div>
+            <div><span>Period</span><strong><?= d($cur['start_date']) ?> — <?= d($end) ?></strong></div>
+            <div><span>Invoices</span><strong><?= count($rows) ?></strong></div>
+        </div>
+
+        <table>
+            <thead><tr><th>Date</th><th>Invoice No</th><th class="n">Amount</th></tr></thead>
+            <tbody>
+            <?php if ($rows): foreach ($rows as $r): ?>
+                <tr>
+                    <td><?= date('d/m/Y', strtotime($r['DateReceived'])) ?></td>
+                    <td><?= h($r['InvoiceNumber']) ?></td>
+                    <td class="n">R <?= number_format($r['Total'], 2) ?></td>
+                </tr>
+            <?php endforeach; else: ?>
+                <tr><td colspan="3">No invoices in this period.</td></tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+
+        <div class="tot"><div class="tbox">
+            <div class="trow"><span>Total invoices</span><span><?= count($rows) ?></span></div>
+            <div class="tgrand"><span>Grand Total</span><strong>R <?= number_format($total, 2) ?></strong></div>
+        </div></div>
+
+        <div class="bank">
+            <b>Banking details</b>
+            FNB · Laundry Care · Cheque<br>Account: 63179920872
+        </div>
+        <div class="foot"><strong>Thank you for your business</strong></div>
+    </article>
+</main>
+<script>window.STMT = <?= json_encode($data, JSON_HEX_TAG) ?>;</script>
+<script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
+<script src="js/excel.js"></script>
+<?php endif; ?>
 
 </body>
 </html>
