@@ -12,11 +12,14 @@ foreach ($periods as $p) {
     if (!$p['is_closed']) $open = $p;
     if ($p['id'] == $pid) $cur = $p;
 }
+$lastClosedId = 0;
+foreach ($periods as $p) { if ($p['is_closed']) { $lastClosedId = (int)$p['id']; break; } }
 $openRows = $open ? getInvoices($pdo, $open['id']) : [];
 $rows  = $cur ? getInvoices($pdo, $cur['id']) : [];
-$total = array_sum(array_column($rows, 'Total'));
+$fuel  = $cur ? round((int)$cur['fuel_days'] * (float)$cur['fuel_rate'], 2) : 0;
+$total = array_sum(array_column($rows, 'Total')) + $fuel;
 $end   = $cur ? ($cur['end_date'] ?: date('Y-m-d')) : '';
-$data  = $cur ? ['name' => $cur['name'], 'start' => $cur['start_date'], 'end' => $end, 'rows' => $rows, 'total' => $total] : null;
+$data  = $cur ? ['name' => $cur['name'], 'start' => $cur['start_date'], 'end' => $end, 'rows' => $rows, 'total' => $total, 'fuel' => ['days' => (int)$cur['fuel_days'], 'rate' => (float)$cur['fuel_rate'], 'amount' => $fuel]] : null;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -25,7 +28,7 @@ $data  = $cur ? ['name' => $cur['name'], 'start' => $cur['start_date'], 'end' =>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Statements — Laundry Care</title>
 <link rel="stylesheet" href="css/statement.css">
-<link rel="manifest" href="manifest.json">
+
 <meta name="theme-color" content="#0f0f1a">
 </head>
 <body>
@@ -92,7 +95,10 @@ $data  = $cur ? ['name' => $cur['name'], 'start' => $cur['start_date'], 'end' =>
         <a class="btn ghost" href="monthly_statement.php">⟵ Statements</a>
         <a class="btn ghost" href="../invoice_generator.php">Invoice</a>
         <?php if (!$cur['is_closed']): ?><em class="chip open">Period still open</em><?php endif; ?>
+        <?php if ($cur['is_closed'] && (int)$cur['id'] === $lastClosedId): ?><button type="button" class="btn ghost" id="reopenBtn" data-id="<?= (int)$cur['id'] ?>">↺ Reopen</button><?php endif; ?>
         <span class="sp"></span>
+        <button type="button" class="act" id="fuelBtn" style="background:linear-gradient(135deg,#ff5f6d,#e11d48);box-shadow:0 8px 22px rgba(225,29,72,.45)"><i>⛽</i>Fuel</button>
+        
         <button type="button" class="act pdf" onclick="window.print()">
             <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg></i>
             Print / Save PDF
@@ -135,7 +141,7 @@ $data  = $cur ? ['name' => $cur['name'], 'start' => $cur['start_date'], 'end' =>
         </div>
 
         <div class="meta">
-            <div><span>To</span><strong>Teremok Lodge</strong><em>49 Marine Dr, Umhlanga, 4319</em></div>
+            <div><span>To</span><strong>Teremok Lodge &amp; Spa</strong><em>49 Marine Drive, Umhlanga Rocks<br>VAT # 4470205669</em></div>
             <div><span>Period</span><strong><?= d($cur['start_date']) ?> — <?= d($end) ?></strong></div>
             <div><span>Invoices</span><strong><?= count($rows) ?></strong></div>
         </div>
@@ -156,22 +162,30 @@ $data  = $cur ? ['name' => $cur['name'], 'start' => $cur['start_date'], 'end' =>
         </table>
 
         <div class="tot"><div class="tbox">
-            <div class="trow"><span>Total invoices</span><span><?= count($rows) ?></span></div>
+            <script>window.STMT = <?= json_encode($data, JSON_HEX_TAG) ?>; window.FUEL = <?= json_encode(['id' => (int)$cur['id'], 'days' => (int)$cur['fuel_days'], 'rate' => (float)$cur['fuel_rate']]) ?>;</script>
+<script src="js/fuel.js?v=3"></script>
+            <?php if ($fuel > 0): ?><div class="trow"><span>Fuel (<?= (int)$cur['fuel_days'] ?> days × R <?= number_format($cur['fuel_rate'], 2) ?>)</span><span>R <?= number_format($fuel, 2) ?></span></div><?php endif; ?>
             <div class="tgrand"><span>Grand Total</span><strong>R <?= number_format($total, 2) ?></strong></div>
         </div></div>
 
         <div class="bank">
             <b>Banking details</b>
-            FNB · Laundry Care · Cheque<br>Account: 63179920872
+            Bank: FNB<br>
+            Account Holder: Laundry Care<br>
+            Account Number: 63179920872<br>
+            Account Type: Cheque
         </div>
         <div class="foot"><strong>Thank you for your business</strong></div>
     </article>
 </main>
-<script>window.STMT = <?= json_encode($data, JSON_HEX_TAG) ?>;</script>
+<script>window.STMT = <?= json_encode($data, JSON_HEX_TAG) ?>; window.FUEL = <?= json_encode(['id' => (int)$cur['id'], 'days' => (int)$cur['fuel_days'], 'rate' => (float)$cur['fuel_rate']]) ?>;</script>
+<script src="js/fuel.js?v=3"></script>
 <script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
+<script>window.ExcelJS || document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"><\/script>');</script>
 <script src="js/excel.js"></script>
+<script src="js/statement.js"></script>
 <?php endif; ?>
 
-<script>if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');</script>
+
 </body>
 </html>

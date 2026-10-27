@@ -5,6 +5,14 @@ document.querySelectorAll('.card').forEach(c => c.onclick = () => {
     document.querySelectorAll('.panel').forEach(p => p.hidden = p.id !== c.dataset.panel);
 });
 
+$('#reopenBtn')?.addEventListener('click', e => {
+    if (!confirm('Reopen this statement? The current open period will be merged back into it, and you will need to close it again with a new cut-off date.')) return;
+    fetch('php/reopen_period.php', { method: 'POST', body: new URLSearchParams({ id: e.target.dataset.id }) })
+        .then(r => r.json())
+        .then(d => d.ok ? (location.href = 'monthly_statement.php') : alert(d.msg))
+        .catch(() => alert('Could not reopen. Check your connection.'));
+});
+
 const CAP = window.CAP;
 if (!CAP) return;
 const MN = ['January','February','March','April','May','June','July','August','September','October','November','December'];

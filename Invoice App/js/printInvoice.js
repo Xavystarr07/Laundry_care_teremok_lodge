@@ -132,6 +132,7 @@ function printInvoice() {
                 .meta div { background: var(--blue-soft); border-left: 4px solid var(--blue); border-radius: 6px; padding: 9px 12px; }
                 .meta span { display: block; font-size: 10px; letter-spacing: 1.3px; text-transform: uppercase; color: var(--muted); font-weight: 700; }
                 .meta strong { display: block; margin-top: 3px; font-size: 14px; color: var(--ink); }
+                .meta em { display: block; font-style: normal; font-size: 12px; color: var(--muted); margin-top: 2px; }
 
                 /* ── Table ── */
                 table { width: 100%; border-collapse: collapse; }
@@ -205,7 +206,7 @@ function printInvoice() {
             </div>
 
             <div class="meta">
-                <div><span>Hotel</span><strong>${esc(hotels)}</strong></div>
+                <div><span>Hotel</span><strong>Teremok Lodge &amp; Spa</strong><em>49 Marine Drive, Umhlanga Rocks<br>VAT # 4470205669</em></div>
                 <div><span>Unit</span><strong>${esc(units)}</strong></div>
                 <div><span>Date received</span><strong>${esc(dates)}</strong></div>
             </div>

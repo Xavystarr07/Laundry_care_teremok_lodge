@@ -81,7 +81,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;color:#1B2533;font-size:13px;paddin
 .t{display:flex;justify-content:space-between;align-items:flex-end;margin:26px 0 14px;padding-bottom:10px;border-bottom:2px solid #111}
 h2{font-size:26px;letter-spacing:6px;font-weight:300;text-transform:uppercase}.no{font-size:24px;font-weight:700;letter-spacing:3px}
 .m{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px}.m div{background:#F3F3F3;border-left:4px solid #1565C0;border-radius:6px;padding:9px 12px}
-.m span{display:block;font-size:10px;letter-spacing:1.3px;text-transform:uppercase;color:#5B6B7F;font-weight:700}.m strong{font-size:14px}
+.m span{display:block;font-size:10px;letter-spacing:1.3px;text-transform:uppercase;color:#5B6B7F;font-weight:700}.m strong{display:block;font-size:14px}.m em{display:block;font-style:normal;font-size:12px;color:#5B6B7F;margin-top:2px}
 table{width:100%;border-collapse:collapse}th{background:#111;color:#fff;padding:10px 12px;text-align:left;font-size:11.5px;letter-spacing:1px;text-transform:uppercase}
 td{padding:9px 12px;border-bottom:1px solid #C9D6E6}tbody tr:nth-child(even) td{background:#F7F7F7}.n{text-align:right}th.n{text-align:right}.c{font-family:Consolas,monospace;font-weight:700}
 .g{display:flex;justify-content:flex-end;margin-top:18px}.b{min-width:280px;border:2px solid #111;border-radius:10px;overflow:hidden}
@@ -93,7 +93,7 @@ td{padding:9px 12px;border-bottom:1px solid #C9D6E6}tbody tr:nth-child(even) td{
 <div class="h"><div><h1>Laundry Care</h1><div class="tag">A FRESH START IN EVERY WASH</div><p>2 Tottenham Road<br>Parkgate<br>Cornubia</p></div>
 <div class="ct"><b style="color:#1565C0">www.laundrycare.co.za</b><br>donovanmark14@gmail.com<br>laundry_care@outlook.com<br>062 283 9374<br>069 780 0340</div></div>
 <div class="t"><h2>Invoice</h2><div class="no">${cur.orig}</div></div>
-<div class="m"><div><span>Hotel</span><strong>Teremok Lodge</strong></div><div><span>Unit</span><strong>All</strong></div><div><span>Date received</span><strong>${cur.date}</strong></div></div>
+<div class="m"><div><span>Hotel</span><strong>Teremok Lodge &amp; Spa</strong><em>49 Marine Drive, Umhlanga Rocks<br>VAT # 4470205669</em></div><div><span>Unit</span><strong>All</strong></div><div><span>Date received</span><strong>${cur.date}</strong></div></div>
 <table><thead><tr><th>Code</th><th>Description</th><th class="n">Unit Price</th><th class="n">Qty</th><th class="n">Total</th></tr></thead><tbody>${rows}</tbody></table>
 <div class="g"><div class="b"><div><span>Total items</span><span>${n}</span></div><div class="gt"><span>GRAND TOTAL</span><strong>R ${tot.toFixed(2)}</strong></div></div></div>
 <div class="f"><b>Thank you for your business</b></div>
